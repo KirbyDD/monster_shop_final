@@ -23,7 +23,7 @@ class Cart
   end
 
   def subtotal(item)
-    item.price * @contents[item.id.to_s]
+      item.merchant.apply_discount(item, @contents[item.id.to_s])
   end
 
   def total
