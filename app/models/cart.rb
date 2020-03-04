@@ -28,7 +28,8 @@ class Cart
 
   def total
     @contents.sum do |item_id,quantity|
-      Item.find(item_id).price * quantity
+      item = Item.find(item_id)
+      item.merchant.apply_discount(item, @contents[item.id.to_s])
     end
   end
 
