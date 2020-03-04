@@ -11,6 +11,7 @@ describe Merchant, type: :model do
 
   describe "relationships" do
     it {should have_many :items}
+    it {should have_many :discounts}
   end
 
   describe 'instance methods' do
@@ -72,5 +73,17 @@ describe Merchant, type: :model do
       expect(@meg.pending_orders.length).to eq(3)
     end
 
+
+    it 'apply_discount' do
+      bike_shop = Merchant.create!(name: "Brian's Bike Shop", address: '123 Bike Rd.', city: 'Richmond', state: 'VA', zip: 23137)
+      user_1 = bike_shop.users.create!(name: "Tommy", address: "123", city: "Bruh", state: "CO", zip: "99999", email: "zboy98772hotmail.com", password: "test", role: 1)
+      twenty_perc = bike_shop.discounts.create!(percentage: 20, quantity: 5)
+      ten_perc = bike_shop.discounts.create!(percentage: 10, quantity: 2)
+      chain = bike_shop.items.create(name: "Chain", description: "It'll never break!", price: 10, image: "https://www.rei.com/media/4e1f5b05-27ef-4267-bb9a-14e35935f218?size=784x588", inventory: 22)
+      allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(user_1)
+
+      expect(bike_shop.apply_discount(chain, 5)).to eq(40)
+
+    end
   end
 end

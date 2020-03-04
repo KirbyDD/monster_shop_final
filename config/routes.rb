@@ -66,6 +66,13 @@ Rails.application.routes.draw do
     patch '/items/:item_id', to: "items#update"
     patch '/items/:item_id/:status', to: "items#update"
     patch '/item_orders/:id', to: "item_orders#update"
+
+    get '/discounts', to: "discounts#index"
+    get '/discounts/new', to: "discounts#new"
+    post '/discounts', to: "discounts#create"
+    get '/discounts/:id/edit', to: "discounts#edit"
+    patch '/discounts/:id', to: "discounts#update"
+    delete '/discounts/:id', to: "discounts#destroy"
   end
 
   namespace :admin do

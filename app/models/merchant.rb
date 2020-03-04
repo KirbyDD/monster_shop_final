@@ -2,6 +2,7 @@ class Merchant <ApplicationRecord
   has_many :items, dependent: :destroy
   has_many :users
   has_many :item_orders, through: :items
+  has_many :discounts
 
   validates_presence_of :name,
                         :address,
@@ -37,6 +38,16 @@ class Merchant <ApplicationRecord
       update(status: "disabled")
     else
       update(status: "active")
+    end
+  end
+
+  def apply_discount(item, order_quantity)
+    discount = discounts.where("quantity <= ?", order_quantity).order(percentage: :desc).pluck(:percentage).first
+    if discount
+      discount_amount = item.price * order_quantity * (discount.to_f / 100)
+      item.price * order_quantity - discount_amount
+    else
+      item.price * order_quantity
     end
   end
 
