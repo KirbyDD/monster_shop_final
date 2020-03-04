@@ -21,4 +21,10 @@ RSpec.describe "As a merchant", type: :feature do
       expect(page).to have_content("Item Quantity Needed: 2")
     end
   end
+
+  it 'can be accessed from merchant dashboard' do
+    visit '/merchant'
+    click_on "Manage Discounts"
+    expect(current_path).to eq('/merchant/discounts')
+  end
 end
